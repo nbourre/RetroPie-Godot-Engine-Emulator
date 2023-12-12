@@ -17,11 +17,13 @@ rp_module_help="Game extensions: .pck .zip."
 rp_module_help+="\n\nCopy your games to $romdir/$rp_module_id."
 rp_module_help+="\n\nAuthor: hiulit (https://github.com/hiulit)."
 rp_module_help+="\n\nRepository: https://github.com/hiulit/RetroPie-Godot-Game-Engine-Emulator"
+rp_module_help+="\n\My Fork: posiden104 (https://github.com/posiden104)."
+rp_module_help+="\n\nThis forked Repository: https://github.com/posiden104/RetroPie-Godot-Game-Engine-Emulator"
 rp_module_help+="\n\nLicenses:"
 rp_module_help+="\n- Source code, Godot Engine and FRT: MIT."
 rp_module_help+="\n- Godot logo: CC BY 3.0."
 rp_module_help+="\n- Godot pixel logo: CC BY-NC-SA 4.0."
-rp_module_licence="MIT https://raw.githubusercontent.com/hiulit/RetroPie-Godot-Game-Engine-Emulator/master/LICENSE"
+rp_module_licence="MIT https://raw.githubusercontent.com/posiden104/RetroPie-Godot-Game-Engine-Emulator/master/LICENSE"
 rp_module_section="opt"
 rp_module_flags="x86 x86_64 aarch64 rpi1 rpi2 rpi3 rpi4"
 
@@ -39,11 +41,8 @@ VERSION_MINOR="$(echo "$SCRIPT_VERSION" | cut -d "." -f 2)"
 VERSION_PATCH="$(echo "$SCRIPT_VERSION" | cut -d "." -f 3)"
 
 GODOT_VERSIONS=(
-    "2.1.6"
-    "3.0.6"
-    "3.2.3"
-    "3.4.5"
-    "3.5.2"
+    "3.5.2",
+    "4.0.3"
 )
 
 AUDIO_DRIVERS=(
@@ -600,7 +599,7 @@ function _install_update_theme() {
     local tmp_dir="$TMP_DIR/themes"
     mkUserDir "$tmp_dir"
     rmDirExists "$ES_THEMES_DIR/$theme/godot-engine"
-    gitPullOrClone "$tmp_dir" "https://github.com/hiulit/RetroPie-Godot-Engine-Emulator"
+    gitPullOrClone "$tmp_dir" "https://github.com/posiden104/RetroPie-Godot-Engine-Emulator"
  
     if [[ "$theme" == "carbon-2021" ]]; then
         cp "$tmp_dir/art/controller.svg" "$CARBON_2021_CONTROLLER_IMAGE"
@@ -628,7 +627,7 @@ function _uninstall_theme() {
 function _install_update_scraper() {
     local scraper_dir=""$home/RetroPie-Itchio-Godot-Scraper""
     rmDirExists "$scraper_dir"
-    gitPullOrClone "$scraper_dir" "https://github.com/hiulit/RetroPie-Itchio-Godot-Scraper"
+    gitPullOrClone "$scraper_dir" "https://github.com/posiden104/RetroPie-Itchio-Godot-Scraper"
     chown -R "$user:$user" "$scraper_dir"
     chmod +x "$scraper_dir/setup.sh" && chown -R "$user:$user" "$scraper_dir/setup.sh"
     chmod +x "$scraper_dir/retropie-itchio-godot-scraper.sh" && chown -R "$user:$user" "$scraper_dir/retropie-itchio-godot-scraper.sh"
@@ -639,7 +638,7 @@ function _install_update_scraper() {
 # Scriptmodule functions ############################
 
 function sources_godot-engine() {
-    local url="https://github.com/hiulit/RetroPie-Godot-Game-Engine-Emulator/releases/download/v${VERSION_MAJOR}.${VERSION_MINOR}.0"
+    local url="https://github.com/posiden104/RetroPie-Godot-Game-Engine-Emulator/releases/download/v${VERSION_MAJOR}.${VERSION_MINOR}.0"
 
     for version in "${GODOT_VERSIONS[@]}"; do
         if isPlatform "x86"; then
