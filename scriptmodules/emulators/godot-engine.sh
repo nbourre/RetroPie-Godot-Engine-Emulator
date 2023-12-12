@@ -41,7 +41,7 @@ VERSION_MINOR="$(echo "$SCRIPT_VERSION" | cut -d "." -f 2)"
 VERSION_PATCH="$(echo "$SCRIPT_VERSION" | cut -d "." -f 3)"
 
 GODOT_VERSIONS=(
-    "3.5.2",
+    "3.5.2"
     "4.0.3"
 )
 
