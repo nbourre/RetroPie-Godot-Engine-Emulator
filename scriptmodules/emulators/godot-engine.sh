@@ -678,7 +678,7 @@ function install_godot-engine() {
     echo
     echo "Installing the scraper..."
     echo
-    _install_update_scraper
+    # _install_update_scraper
 
     if [[ -d "$TMP_DIR" ]]; then
         # Create the "settings" folder inside the "godot-engine" folder.
