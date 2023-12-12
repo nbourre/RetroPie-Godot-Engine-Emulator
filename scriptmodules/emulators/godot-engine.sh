@@ -23,7 +23,7 @@ rp_module_help+="\n\nLicenses:"
 rp_module_help+="\n- Source code, Godot Engine and FRT: MIT."
 rp_module_help+="\n- Godot logo: CC BY 3.0."
 rp_module_help+="\n- Godot pixel logo: CC BY-NC-SA 4.0."
-rp_module_licence="MIT https://raw.githubusercontent.com/posiden104/RetroPie-Godot-Game-Engine-Emulator/master/LICENSE"
+rp_module_licence="MIT https://raw.githubusercontent.com/posiden104/RetroPie-Godot-Engine-Emulator/master/LICENSE"
 rp_module_section="opt"
 rp_module_flags="x86 x86_64 aarch64 rpi1 rpi2 rpi3 rpi4"
 
@@ -638,7 +638,7 @@ function _install_update_scraper() {
 # Scriptmodule functions ############################
 
 function sources_godot-engine() {
-    local url="https://github.com/posiden104/RetroPie-Godot-Game-Engine-Emulator/releases/download/v${VERSION_MAJOR}.${VERSION_MINOR}.0"
+    local url="https://github.com/posiden104/RetroPie-Godot-Engine-Emulator/releases/download/v${VERSION_MAJOR}.${VERSION_MINOR}.0"
 
     for version in "${GODOT_VERSIONS[@]}"; do
         if isPlatform "x86"; then
