@@ -17,13 +17,13 @@ rp_module_help="Game extensions: .pck .zip."
 rp_module_help+="\n\nCopy your games to $romdir/$rp_module_id."
 rp_module_help+="\n\nAuthor: hiulit (https://github.com/hiulit)."
 rp_module_help+="\n\nRepository: https://github.com/hiulit/RetroPie-Godot-Game-Engine-Emulator"
-rp_module_help+="\n\My Fork: posiden104 (https://github.com/posiden104)."
-rp_module_help+="\n\nThis forked Repository: https://github.com/posiden104/RetroPie-Godot-Game-Engine-Emulator"
+rp_module_help+="\n\My Fork: nbourre (https://github.com/nbourre)."
+rp_module_help+="\n\nThis forked Repository: https://github.com/nbourre/RetroPie-Godot-Engine-Emulator"
 rp_module_help+="\n\nLicenses:"
 rp_module_help+="\n- Source code, Godot Engine and FRT: MIT."
 rp_module_help+="\n- Godot logo: CC BY 3.0."
 rp_module_help+="\n- Godot pixel logo: CC BY-NC-SA 4.0."
-rp_module_licence="MIT https://raw.githubusercontent.com/posiden104/RetroPie-Godot-Engine-Emulator/master/LICENSE"
+rp_module_licence="MIT https://raw.githubusercontent.com/nbourre/RetroPie-Godot-Engine-Emulator/master/LICENSE"
 rp_module_section="opt"
 rp_module_flags="x86 x86_64 aarch64 rpi1 rpi2 rpi3 rpi4"
 
@@ -34,21 +34,21 @@ RP_MODULE_ID="$rp_module_id"
 TMP_DIR="$home/.tmp/$RP_MODULE_ID"
 SETTINGS_DIR="$romdir/$RP_MODULE_ID/settings"
 CONFIGS_DIR="/opt/retropie/configs/$RP_MODULE_ID"
+EMU_DIR="/opt/retropie/emulators/$RP_MODULE_ID"
 
-SCRIPT_VERSION="1.12.3"
+SCRIPT_VERSION="1.12.4"
 VERSION_MAJOR="$(echo "$SCRIPT_VERSION" | cut -d "." -f 1)"
 VERSION_MINOR="$(echo "$SCRIPT_VERSION" | cut -d "." -f 2)"
 VERSION_PATCH="$(echo "$SCRIPT_VERSION" | cut -d "." -f 3)"
 
 GODOT_VERSIONS=(
-    "3.5.2"
-    "4.0.3"
+    "4.3"
 )
 
 AUDIO_DRIVERS=(
-    "SDL2"
+    "PulseAudio"
 )
-AUDIO_DRIVER="SDL2"
+AUDIO_DRIVER="PulseAudio"
 
 VIDEO_DRIVERS=(
     "GLES2"
@@ -76,6 +76,7 @@ OVERRIDE_CFG_DEFAULTS_FILE="$SETTINGS_DIR/.override-defaults.cfg"
 OVERRIDE_CFG_FILE="$romdir/$RP_MODULE_ID/override.cfg" # This file must be in the same folder as the games.
 SETTINGS_CFG_DEFAULTS_FILE="$SETTINGS_DIR/.godot-engine-settings-defaults.cfg"
 SETTINGS_CFG_FILE="$SETTINGS_DIR/godot-engine-settings.cfg"
+
 
 
 # Flags ###############################
@@ -162,7 +163,6 @@ function _main_config_dialog() {
         fi
     fi
 }
-
 
 function _gpio_virtual_keyboard_dialog() {
     local i=1
@@ -638,12 +638,21 @@ function _install_update_scraper() {
 # Scriptmodule functions ############################
 
 function sources_godot-engine() {
-    local url="https://github.com/posiden104/RetroPie-Godot-Engine-Emulator/releases/download/v${VERSION_MAJOR}.${VERSION_MINOR}.0"
+    local url="https://github.com/nbourre/RetroPie-Godot-Engine-Emulator/releases/download/v${VERSION_MAJOR}.${VERSION_MINOR}.0"
+
+# shopt -s extdebug
+# declare -F isPlatform
 
     for version in "${GODOT_VERSIONS[@]}"; do
+        # echo Press Enter
+        # echo isPlatform
+        # read
+
         if isPlatform "x86"; then
+            echo Downloading x11_32
             downloadAndExtract "${url}/godot_${version}_x11_32.zip" "$md_build"
         elif isPlatform "x86_64"; then
+            echo Downloading x11_86
             downloadAndExtract "${url}/godot_${version}_x11_64.zip" "$md_build"
         elif isPlatform "aarch64"; then
             downloadAndExtract "${url}/frt_${version}_arm64.zip" "$md_build"
@@ -652,6 +661,9 @@ function sources_godot-engine() {
         elif isPlatform "rpi2" || isPlatform "rpi3" || isPlatform "rpi4"; then
             downloadAndExtract "${url}/frt_${version}_pi2.zip" "$md_build"
         fi
+
+        echo Press Enter...
+        read
     done
 }
 
@@ -700,6 +712,8 @@ function install_godot-engine() {
         echo "There must have been a problem when installing/updating the setup script." >&2
         exit 1
     fi
+
+    #TODO : chmod +x on the file godot_4.3_x11_64
 }
 
 
