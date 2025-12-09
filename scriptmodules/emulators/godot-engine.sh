@@ -673,16 +673,21 @@ function sources_godot-engine() {
 
     for version in "${GODOT_VERSIONS[@]}"; do
         if isPlatform "x86"; then
-            _download_if_exists "${url}/godot_${version}_x11_32.zip" "$md_build"
-            _download_if_exists "${url}/godot_${version}_x11_32_mono.zip" "$md_build"
+            downloadAndExtract "${url}/godot_${version}_x11_32.zip" "$md_build"
+            # _download_if_exists "${url}/godot_${version}_x11_32.zip" "$md_build"
+            # _download_if_exists "${url}/godot_${version}_x11_32_mono.zip" "$md_build"
         elif isPlatform "x86_64"; then
-            _download_if_exists "${url}/godot_${version}_x11_64.zip" "$md_build"
+            downloadAndExtract "${url}/godot_${version}_x11_64.zip" "$md_build"
+            # _download_if_exists "${url}/godot_${version}_x11_64.zip" "$md_build"
         elif isPlatform "aarch64"; then
-            _download_if_exists "${url}/frt_${version}_arm64.zip" "$md_build"
+            downloadAndExtract "${url}/frt_${version}_arm64.zip" "$md_build"
+            # _download_if_exists "${url}/frt_${version}_arm64.zip" "$md_build"
         elif isPlatform "rpi1"; then
-            _download_if_exists "${url}/frt_${version}_pi1.zip" "$md_build"
+            downloadAndExtract "${url}/frt_${version}_pi1.zip" "$md_build"
+            #_download_if_exists "${url}/frt_${version}_pi1.zip" "$md_build"
         elif isPlatform "rpi2" || isPlatform "rpi3" || isPlatform "rpi4"; then
-            _download_if_exists "${url}/frt_${version}_pi2.zip" "$md_build"
+            downloadAndExtract "${url}/frt_${version}_pi2.zip" "$md_build"
+            # _download_if_exists "${url}/frt_${version}_pi2.zip" "$md_build"
         fi
     done
 }
