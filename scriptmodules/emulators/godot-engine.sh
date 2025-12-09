@@ -43,6 +43,7 @@ VERSION_PATCH="$(echo "$SCRIPT_VERSION" | cut -d "." -f 3)"
 
 GODOT_VERSIONS=(
     "4.3"
+    "4.5.1"
 )
 
 AUDIO_DRIVERS=(
@@ -634,36 +635,55 @@ function _install_update_scraper() {
     bash "$scraper_dir/setup.sh" -i retropie-menu
 }
 
+function _file_exists_online() {
+    local url="$1"
+    local response_code
+    
+    # Use curl to check if file exists (HEAD request)
+    response_code=$(curl -o /dev/null -s -w "%{http_code}" -I "$url")
+    
+    if [[ "$response_code" == "200" ]]; then
+        return 0  # File exists
+    else
+        return 1  # File doesn't exist
+    fi
+}
+
+function _download_if_exists() {
+    local url="$1"
+    local dest_dir="$2"
+    local filename="$(basename "$url")"
+    
+    echo "Checking if $filename exists online..."
+    
+    if _file_exists_online "$url"; then
+        echo "Found $filename, downloading..."
+        downloadAndExtract "$url" "$dest_dir"
+        return 0
+    else
+        echo "WARNING: $filename not found at $url (HTTP $response_code)"
+        return 1
+    fi
+}
 
 # Scriptmodule functions ############################
 
 function sources_godot-engine() {
     local url="https://github.com/nbourre/RetroPie-Godot-Engine-Emulator/releases/download/v${VERSION_MAJOR}.${VERSION_MINOR}.0"
 
-# shopt -s extdebug
-# declare -F isPlatform
-
     for version in "${GODOT_VERSIONS[@]}"; do
-        # echo Press Enter
-        # echo isPlatform
-        # read
-
         if isPlatform "x86"; then
-            echo Downloading x11_32
-            downloadAndExtract "${url}/godot_${version}_x11_32.zip" "$md_build"
+            _download_if_exists "${url}/godot_${version}_x11_32.zip" "$md_build"
+            _download_if_exists "${url}/godot_${version}_x11_32_mono.zip" "$md_build"
         elif isPlatform "x86_64"; then
-            echo Downloading x11_86
-            downloadAndExtract "${url}/godot_${version}_x11_64.zip" "$md_build"
+            _download_if_exists "${url}/godot_${version}_x11_64.zip" "$md_build"
         elif isPlatform "aarch64"; then
-            downloadAndExtract "${url}/frt_${version}_arm64.zip" "$md_build"
+            _download_if_exists "${url}/frt_${version}_arm64.zip" "$md_build"
         elif isPlatform "rpi1"; then
-            downloadAndExtract "${url}/frt_${version}_pi1.zip" "$md_build"
+            _download_if_exists "${url}/frt_${version}_pi1.zip" "$md_build"
         elif isPlatform "rpi2" || isPlatform "rpi3" || isPlatform "rpi4"; then
-            downloadAndExtract "${url}/frt_${version}_pi2.zip" "$md_build"
+            _download_if_exists "${url}/frt_${version}_pi2.zip" "$md_build"
         fi
-
-        echo Press Enter...
-        read
     done
 }
 
